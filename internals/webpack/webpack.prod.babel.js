@@ -18,16 +18,15 @@ module.exports = require('./webpack.base.babel')({
 
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
   output: {
+    path: path.resolve(process.cwd(), 'build/static/'),
     filename: '[name].[chunkhash].js',
     chunkFilename: '[name].[chunkhash].chunk.js',
+    publicPath: '/static/'
   },
 
   // We use ExtractTextPlugin so we get a seperate CSS file instead
   // of the CSS being in the JS and injected as a style tag
-  cssLoaders: ExtractTextPlugin.extract(
-    'style-loader',
-    'css-loader?modules&importLoaders=1!postcss-loader'
-  ),
+  cssLoaders: ExtractTextPlugin.extract('style', 'css?importLoaders=1!postcss-loader'),
 
   // In production, we minify our CSS with cssnano
   postcssPlugins: [
@@ -64,6 +63,9 @@ module.exports = require('./webpack.base.babel')({
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({
       template: 'app/index.html',
+      filename: '../views/index.html',
+      minify: false,
+      /*
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -76,11 +78,15 @@ module.exports = require('./webpack.base.babel')({
         minifyCSS: true,
         minifyURLs: true,
       },
+      */
       inject: true,
     }),
 
     // Extract the CSS into a seperate file
-    new ExtractTextPlugin('[name].[contenthash].css'),
+    new ExtractTextPlugin('[name].[contenthash].css', {
+      disable: false,
+      allChunks: true,
+    }),
 
     // Put it in the end to capture all the HtmlWebpackPlugin's
     // assets manipulations and do leak its manipulations to HtmlWebpackPlugin
@@ -91,6 +97,9 @@ module.exports = require('./webpack.base.babel')({
       // No need to cache .htaccess. See http://mxs.is/googmp,
       // this is applied before any match in `caches` section
       excludes: ['.htaccess'],
+      ServiceWorker: {
+        output: '../sw.js'
+      },
 
       caches: {
         main: [':rest:'],

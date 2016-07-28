@@ -1,6 +1,11 @@
 /* vim:set ft=javascript.jsx : */
 import React from 'react'
 
+{{#if wantMessages}}
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
+{{/if}}
+
 {{#if wantCSS}}
 import styles from './styles.css'
 {{/if}}
@@ -11,6 +16,9 @@ function {{ properCase name }}() {
     <div className={{curly true}}styles.{{ camelCase name }}{{curly}}>
     {{else}}
     <div>
+    {{/if}}
+    {{#if wantMessages}}
+      <FormattedMessage {...messages.header} />
     {{/if}}
     </div>
   )

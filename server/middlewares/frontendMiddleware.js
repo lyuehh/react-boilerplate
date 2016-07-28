@@ -20,7 +20,7 @@ const addDevMiddlewares = (app, webpackConfig) => {
 
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
-  app.use('/api', jsonServer.router(path.join(__dirname + '/db.json')));
+  app.use('/api', jsonServer.router(path.join(`${__dirname}/db.json`)));
 
   // Since webpackDevMiddleware uses memory-fs internally to store build
   // artifacts, we use it instead

@@ -4,8 +4,10 @@ import { connect } from 'react-redux'
 {{#if wantHeaders}}
 import Helmet from 'react-helmet'
 {{/if}}
+import { createSelector, createStructuredSelector } from 'reselect';
 {{#if wantActionsAndReducer}}
-import select{{properCase name}} from './selectors'
+import * as selectors from './selectors'
+import * as actions from './actions'
 {{/if}}
 {{#if wantMessages}}
 import { FormattedMessage } from 'react-intl';
@@ -40,7 +42,9 @@ export class {{ properCase name }} extends React.Component { // eslint-disable-l
 }
 
 {{#if wantActionsAndReducer}}
-const mapStateToProps = select{{properCase name}}()
+const mapStateToProps = createStructuredSelector({
+  posts: selectors.selectBlogPost()
+})
 {{/if}}
 
 function mapDispatchToProps(dispatch) {

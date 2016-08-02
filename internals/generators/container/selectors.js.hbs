@@ -5,21 +5,12 @@ import { createSelector } from 'reselect'
  */
 const select{{ properCase name }}Domain = () => state => state.get('{{ camelCase name }}')
 
-/**
- * Other specific selectors
- */
-
-
-/**
- * Default selector used by {{ properCase name }}
- */
-
-const select{{ properCase name }} = () => createSelector(
+const selectBlogPost = () => createSelector(
   select{{ properCase name }}Domain(),
-  (substate) => substate.toJS()
+  (substate) => substate.get('posts')
 )
 
-export default select{{ properCase name }}
 export {
   select{{ properCase name }}Domain,
+  selectBlogPost
 }

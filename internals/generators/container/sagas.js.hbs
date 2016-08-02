@@ -1,11 +1,28 @@
 import { take, call, put, select } from 'redux-saga/effects'
+import * as constants from './constants'
+import * as actions from './actions'
+import request from 'utils/request'
 
 // All sagas to be loaded
 export default [
-  defaultSaga,
+  getPost,
 ]
 
-// Individual exports for testing
-export function* defaultSaga() {
+export function* getPost() {
+  while (true) {
+    const { payload } = yield take(constants.GET_POST)
 
+    var requestURL = '/api/posts'
+
+    try {
+      const rsp = yield call(request, requestURL, {
+        method: 'GET'
+      })
+
+      yield put(actions.getPostSucc(rsp))
+    } catch (e) {
+      yield put(actions.getPostError(e))
+    }
+  }
 }
+
